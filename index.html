@@ -26,22 +26,22 @@
     }
   </style>
 </head>
-<body>
-  <nav class="w3-sidebar w3-bar-block w3-black w3-card w3-large" style="display:none" id="mySidebar">
-    <a href="javascript:void(0)" onclick="w3_close()" class="w3-button w3-black w3-right">&times;</a><br>
-    <a class="w3-bar-item w3-button" href="#">Home</a>
-    <a class="w3-bar-item w3-button" href="#project_goals">Project Goals</a>
-    <a class="w3-bar-item w3-button" href="#publications">Publications</a>
-    <a class="w3-bar-item w3-button" href="#progress_and_accomplishments">Progress and Accomplishments</a>
-    <a class="w3-bar-item w3-button" href="#future_work">Future Work</a>
-    <a class="w3-bar-item w3-button" href="#participants">Participants</a>
-    <a class="w3-bar-item w3-button" href="#open_source_contributions">Open Source Contributions</a>
-  </nav>
-  <header class="w3-light-grey">
-    <button class="w3-button w3-xxlarge" onclick="w3_open()">&#9776;</button>
-  </header>
-  
+<body>    
   <div class="w3-container">
+  <nav class="w3-sidebar w3-bar-block w3-black w3-card w3-large" style="display:none" id="side-menu">
+      <a href="javascript:void(0)" onclick="w3_close()" class="w3-button w3-black w3-right">&times;</a><br>
+      <a class="w3-bar-item w3-button" onclick="w3_close()" href="#">Home</a>
+      <a class="w3-bar-item w3-button" onclick="w3_close()" href="#project_goals">Project Goals</a>
+      <a class="w3-bar-item w3-button" onclick="w3_close()" href="#publications">Publications</a>
+      <a class="w3-bar-item w3-button" onclick="w3_close()" href="#progress_and_accomplishments">Progress and Accomplishments</a>
+      <a class="w3-bar-item w3-button" onclick="w3_close()" href="#future_work">Future Work</a>
+      <a class="w3-bar-item w3-button" onclick="w3_close()" href="#participants">Participants</a>
+      <a class="w3-bar-item w3-button" onclick="w3_close()" href="#open_source_contributions">Open Source Contributions</a>
+    </nav>
+    <header class="w3-light-grey">
+      <button class="w3-button w3-xxlarge" onclick="w3_open()">&#9776;</button>
+    </header>
+
     <h1 class="w3-center">CWRU Greener Pastures Project</h1>
     <p>This is the website/repository for code and tools that accompany the Greener Pastures project, a collaborative effort between Case Western Reserve University (CWRU) and Virginia Tech. This project aims to develop an autonomous robot for manure management in pastures, with the goal of reducing environmental water contamination.  The work was supported by a grant from the <a href="https://www.nifa.usda.gov/">United States Department of Agriculture National Institute of Food and Agriculture (USDA-NIFA)</a> and the <a href="https://new.nsf.gov/funding/opportunities/cps-cyber-physical-systems">National Science Foundation Cyber-Physical Systems (NSF-CPS)</a> programs, Award Number 2021-67021-34459.  Products of this research are published for public use.</p>
     <blockquote>
@@ -52,7 +52,7 @@
       <a href="https://engineering.case.edu/research/labs/biologically-inspired-robotics">Biorobotics Laboratory (PI Prof. Roger Quinn, Ph.D.)</a><br/>
     </blockquote>
     
-    <h2 id="#project_goals">Project Goals</h2>
+    <h2 id="project_goals">Project Goals</h2>
     <ul class="w3-ul">
       <li>Develop CPS algorithms and control for automated manure mitigation.</li>
       <li>Create robot navigation methods for co-livestock autonomy in pasture maintenance.</li>
@@ -60,14 +60,14 @@
       <li>Dissemination, Education, and Outreach.</li>
     </ul>
 
-    <h2 id="#publications">Publications</h2>
+    <h2 id="publications">Publications</h2>
     <ul class="w3-ul hanging">
       <li>I. Adams, R. Quinn, G. Lee, A. Kroeger, R. Thompson, and E. Feuerbacher, "Animal acceptance of an autonomous pasture sanitation robot," In <i>Proc. 11th Int. Conf. on Biomimetic and Biohybrid Systems (Living Machines 2022)</i>, July 2022, doi: 10.1007/978-3-031-20470-8_36.</li>
       <li>I. Adams, R. Quinn, G. Lee, A. Kroeger, and E. Feuerbacher, "Autonomous versus Manual Control of a Pasture Sanitation Robot," In Proc. 12th <i>Int. Conf. on Biomimetic and Biohybrid Systems (Living Machines 2023)</i>, July 2023, doi: 10.1007/978-3-031-39504-8_25.</li>
       <li>M. Arch and E. Rowe, "Greener Pastures: Pasture Sanitation Robot," presented at the CWRU Intersections Poster Session for Undergraduate Projects and Research, Cleveland, OH, April 2024.</li>
     </ul>
 
-    <h2 id="#progress_and_accomplishments">Progress and Accomplishments</h2>
+    <h2 id="progress_and_accomplishments">Progress and Accomplishments</h2>
     <ul class="w3-ul">
       <li><b>PSR1 Development:</b> An existing robot platform (PSR1) has been updated with sensors and algorithms for data collection in pastures, including animal behavior data.</li>
       <li><b>PSR2 Development:</b> A John Deere 1025R sub-compact tractor is being automated (PSR2) with sensors, actuators, and an onboard computer. Progress has been made in teleoperation and autonomous control development.</li>
@@ -79,7 +79,7 @@
       <li><b>Education and Outreach:</b> Undergraduate and graduate students have been mentored, K-12 outreach activities have been conducted, and a conference paper has been submitted.</li>
     </ul>
 
-    <h2 id="#future_work">Future Work</h2>
+    <h2 id="future_work">Future Work</h2>
     <ul class="w3-ul">
       <li>Complete the development of autonomous control algorithms for PSR2.</li>
       <li>Integrate animal location and behavior data into path planning.</li>
@@ -88,7 +88,7 @@
       <li>Continue K-12 and undergraduate student engagement.</li>
     </ul>
 
-    <h2 id="#participants">Participants</h2>
+    <h2 id="participants">Participants</h2>
     <h3>Faculty</h3>
       <ul class="plain">
         <li>Dr. Roger Quinn: <a href="mailto:rdq@case.edu" class="cwru-blue">rdq@case.edu</a></li>
@@ -119,7 +119,7 @@
         <li>Jackson White</li>
       </ul>
 
-    <h2 id="#open_soure_contributions">Open Source Contributions</h2>
+    <h2 id="open_soure_contributions">Open Source Contributions</h2>
     <p>Several open source contributions were created as part of this project.  They are published through GitHub and can be found at the following URLs:</p>
     <ul class="plain">
       <li><a href="https://github.com/cwru-greener-pastures/Heltec_LoRa_OLED_Examples" class="cwru-blue">Heltec_LoRa_OLED_Examples</a></li>
@@ -134,10 +134,10 @@
   
 <script>
 function w3_open() {
-    document.getElementById("mySidebar").style.display = "block";
+    document.getElementById("side-menu").style.display = "block";
 }
 function w3_close() {
-    document.getElementById("mySidebar").style.display = "none";
+    document.getElementById("side-menu").style.display = "none";
 }
 </script>
 
