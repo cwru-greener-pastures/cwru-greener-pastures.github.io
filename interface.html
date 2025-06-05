@@ -1,17 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Greener Pastures MQTT Interface</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=my_location,refresh" />
+<style>
+body, h1, h2, h3, h4, h5, h6 {
+  font-family: Arial, Helvetica, sans-serif;
+}
+</style>
+</head>
+<body>
 
-Result Size: 1465 x 228
-accordian("refresh");
+
+<!-- Page content -->
+<div class="w3-content" style="max-width:2000px;">
+
+
+  <!-- The Band Section -->
+  <div class="w3-container w3-content " style="max-width:800px" id="band">
+    <h2 class="w3-wide w3-center">Greener Pastures MQTT Interface</h2>
+    <div class="w3-container" id="connectPanel">
+
+      <label>MQTT Host</label>
+      <input class="w3-input w3-border" id="host" type="text" placeholder="example.com[:port]" />
+      <label>Topic</label>
+      <input class="w3-input w3-border" id="topic" type="text" placeholder="topic" />
+      <label for="username">Username:</label><br>
+      <input class="w3-input w3-border" type="text" id="username" name="username" placeholder="username" />
+      <label for="pwd">Password:</label><br>
+      <input class="w3-input w3-border" type="password" id="pwd" name="pwd" placeholder="password" />
+
+    </div>
+    <p class="w3-center w3-text-red" id="msg">Message</p>
+    <div class="w3-center">
+      <input class="w3-button w3-round w3-border" id="disConnect" type="button" value="Connect" onclick="onDisConnectClick()" />
+    </div>
+
+    <div class="w3-container w3-content" id="mqttPanel">
+      <p class="w3-center" id="longLat">Longitude: x; Latitude: y</p>
+      <label for="mqttString">MQTT String:</label><br />
+      <input class="w3-input w3-border" id="mqttString" name="pwd" placeholder="MQTT String" disabled/>
+    </div>
+    
+    <div class="w3-panel">
+      <div class="w3-content" id="theBox" style="max-width: 400px">
+        <div class="w3-display-container">
+        <img class="w3-border" id="satImage"  />
+        <div class="material-symbols-outlined w3-display-middle w3-spin" id="refresh">
+refresh</div>
+        <div class="material-symbols-outlined w3-display-position w3-hide" id="marker">
+my_location
+        </div>
+      </div>
+      </div>
+    </div>
+          
+    <div class="w3-container w3-hide" id="bigBlock">
+        <div class="w3-center">
+          <input class="w3-button w3-round w3-border" id="sendMQTT" type="button" value="Send Location" onclick="sendLocationMQTT()" disabled />
+        </div>
+    </div>
+</div>
+
+
+<!-- End Page Content -->
+</div>
+
+
+<!-- Footer -->
+<footer class="w3-container w3-padding-64 w3-center w3-opacity w3-light-grey w3-xlarge">
+</footer>
+
+<script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/latlon-geohash@2.0.0"></script>
+<script type="module">
+import Geohash from 'https://cdn.jsdelivr.net/npm/latlon-geohash@2.0.0';
+
+var updateIndx = 0;
+var updateOnce = 1;
+var obj;
+var marker_position = {left: -618, top: -292};
+
+var mqtt_string_doi = "DOIbit.ly/casevt02"
+var mqtt_string_geohash = "GO2039eia"
+var mqtt_string_target = "TGclean"
+
+var mapSize = 400;
+
+updateGPS();
+
+function updateGPS() {
+  var longLat = document.getElementById("longLat");
+  if (getLocation()) {
+	  setTimeout(updateGPS, 3000);
+  }
+  updateIndx++;
+}
+
+function showPosition(position){
+  var longLat = document.getElementById("longLat");
+  var mqtt = document.getElementById("mqttString");
+  var long = position.coords.longitude;
+  var lat = position.coords.latitude;
+  var mrkr = document.getElementById("marker");
+  
+  longLat.innerText = "Longitude: " + long + "; Latitude: " + lat + ";  updateIndx = [" + updateIndx + "]";
+  
+  mqtt.value = makeString(long, lat);
+  
+  if (updateOnce) {
+    getMap(position);
+    updateOnce = 0;
+  } else {
+  
+    marker_position.left = Math.round((long - obj.extent.xmin) / (obj.extent.xmax - obj.extent.xmin)  * obj.width) - 11;
+    marker_position.top = Math.round((lat - obj.extent.ymin) / (obj.extent.ymax - obj.extent.ymin) * obj.height) - 11;
+  
+    mrkr.style.top = `${marker_position.top}px`;
+    mrkr.style.left = `${marker_position.left}px`;
+  }
+}
+
+function makeString(long, lat) {
+
+  const geohash = Geohash.encode(lat, long, 8);
+  var mqtt_string = mqtt_string_doi + "GO" + geohash + "TS" + Math.round(Date.now()/1000) + "TG" + "clean";
   
   return mqtt_string;
 }
-​
+
 function getMap(position){
   var theImg = document.getElementById("satImage");
   var msg = document.getElementById("msg");
   
   // Create an XMLHttpRequest object
   const xhttp = new XMLHttpRequest();
-​
+
 // Define a callback function
   xhttp.onload = function() {
     // Here you can use the Data
@@ -25,13 +152,13 @@ function getMap(position){
     accordian("marker");
     accordian("refresh");
   }
-​
+
   // Send a request
   xhttp.open("GET", "https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer/export?bbox=" + position.coords.longitude + "%2C" + position.coords.latitude + "%2C" + position.coords.longitude + "%2C" + position.coords.latitude + "&bboxSR=4326&layers=&layerDefs=&size=" + mapSize + "%2C" + mapSize + "&imageSR=4326&historicMoment=&format=png&transparent=false&dpi=&time=&layerTimeOptions=&dynamicLayers=&gdbVersion=&mapScale=9027.977411&rotation=&datumTransformations=&layerParameterValues=&mapRangeValues=&layerRangeValues=&clipping=&spatialFilter=&f=pjson");
   xhttp.send();
 }
-​
-​
+
+
 function showError(error) {
   var x = document.getElementById("longLat");
   x.innerHTML = x.innerHTML + "There was an error... <br />"
@@ -45,3 +172,60 @@ function showError(error) {
     case error.TIMEOUT:
       x.innerHTML = x.innerHTML + "The request to get user location timed out."
       break;
+    case error.UNKNOWN_ERROR:
+      x.innerHTML = x.innerHTML + "An unknown error occurred."
+      break;
+  }
+}
+
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition, showError);
+    return 1;
+  } else { 
+    return 0;
+  }
+}
+</script>
+<script>
+function onDisConnectClick() {
+  var btn = document.getElementById("disConnect");
+  
+  if (btn.value == "Connect") {
+    document.getElementById("host").disabled = true;
+    document.getElementById("topic").disabled = true;
+    document.getElementById("username").disabled = true;
+    document.getElementById("pwd").disabled = true;
+    document.getElementById("sendMQTT").disabled = false;
+    accordian("connectPanel");
+    accordian("bigBlock");
+    btn.value = "Disconnect";
+  } else {
+    document.getElementById("host").disabled = false;
+    document.getElementById("topic").disabled = false;
+    document.getElementById("username").disabled = false;
+    document.getElementById("pwd").disabled = false;
+    document.getElementById("sendMQTT").disabled = true;
+    accordian("connectPanel");
+    accordian("bigBlock");
+    btn.value = "Connect";
+  }
+}
+
+function sendLocationMQTT() {
+}
+
+function accordian(id) {
+  var x = document.getElementById(id);
+  if (x.className.indexOf("w3-hide") == -1) {
+    x.className += " w3-hide";
+  } else {
+    x.className = x.className.replace(" w3-hide", "");
+  }
+}
+
+
+</script>
+
+</body>
+</html>
