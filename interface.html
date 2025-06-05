@@ -218,7 +218,7 @@ function onDisConnectClick() {
     accordian("bigBlock");
     btn.value = "Disconnect";
     msg.innerText = "mqtt.connect(" + host.value + ")";
-    var ret = mqtt.connect('wss://192.168.119.136:1883');
+    var ret = mqtt.connect('ws://192.168.119.136:1883');
     console.log(ret);
   } else {
     document.getElementById("host").disabled = false;
