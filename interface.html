@@ -47,12 +47,16 @@ body, h1, h2, h3, h4, h5, h6 {
     
     <div class="w3-panel">
       <div class="w3-content" id="theBox" style="max-width: 400px">
-        <div class="w3-display-container">
-        <img class="w3-border" id="satImage"  />
-        <div class="material-symbols-outlined w3-display-middle w3-spin" id="refresh">
+        <div class="w3-row">
+          <div class="w3-display-container">
+            <img class="w3-border" id="satImage" style="max-width: 100%" />
+            <div class="material-symbols-outlined w3-display-middle w3-spin" id="refresh">
 refresh</div>
-        <div class="material-symbols-outlined w3-display-position w3-hide" id="marker" style="color: white" >
+            <div class="w3-display-position" style="left: -11px; top: -11px; width: 100%; height: 100%">
+              <div class="material-symbols-outlined w3-display-position w3-hide" id="marker" style="color: white" >
 my_location
+            </div>
+          </div>
         </div>
       </div>
       </div>
@@ -116,11 +120,14 @@ function showPosition(position){
     updateOnce = 0;
   } else {
   
+  	var imgWid 
     marker_position.left = Math.round((long - obj.extent.xmin) / (obj.extent.xmax - obj.extent.xmin)  * obj.width) - 11;
     marker_position.top = Math.round((lat - obj.extent.ymin) / (obj.extent.ymax - obj.extent.ymin) * obj.height) - 11;
   
-    mrkr.style.top = `${marker_position.top}px`;
-    mrkr.style.left = `${marker_position.left}px`;
+    // mrkr.style.top = `${marker_position.top}px`;
+    // mrkr.style.left = `${marker_position.left}px`;
+    mrkr.style.top = `${(lat - obj.extent.ymin) / (obj.extent.ymax - obj.extent.ymin) * 100}%`;
+    mrkr.style.left = `${(lat - obj.extent.ymin) / (obj.extent.ymax - obj.extent.ymin) * 100}%`;
   }
 }
 
@@ -147,7 +154,7 @@ function getMap(position){
     var theBox = document.getElementById("theBox");
     
     obj = JSON.parse(this.responseText);
-    theBox.style.width = `${obj.width}px`;
+    //theBox.style.width = `${obj.width}px`;
     theImg.src = obj.href;
     accordian("marker");
     accordian("refresh");
