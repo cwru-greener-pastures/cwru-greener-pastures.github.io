@@ -143,7 +143,7 @@ function getMap(position){
   }
 
   // Send a request
-  xhttp.open("GET", "https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer/export?bbox=" + position.coords.longitude + "%2C" + position.coords.latitude + "%2C" + position.coords.longitude + "%2C" + position.coords.latitude + "&bboxSR=4326&layers=&layerDefs=&size=600%2C600&imageSR=4326&historicMoment=&format=png&transparent=false&dpi=&time=&layerTimeOptions=&dynamicLayers=&gdbVersion=&mapScale=9027.977411&rotation=&datumTransformations=&layerParameterValues=&mapRangeValues=&layerRangeValues=&clipping=&spatialFilter=&f=pjson");
+  xhttp.open("GET", "https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryTopo/MapServer/export?bbox=" + position.coords.longitude + "%2C" + position.coords.latitude + "%2C" + position.coords.longitude + "%2C" + position.coords.latitude + "&bboxSR=4326&layers=&layerDefs=&size=" + mapSize + "%2C" + mapSize + "&imageSR=4326&historicMoment=&format=png&transparent=false&dpi=&time=&layerTimeOptions=&dynamicLayers=&gdbVersion=&mapScale=9027.977411&rotation=&datumTransformations=&layerParameterValues=&mapRangeValues=&layerRangeValues=&clipping=&spatialFilter=&f=pjson");
   xhttp.send();
 }
 
