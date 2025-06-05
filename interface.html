@@ -25,9 +25,9 @@ body, h1, h2, h3, h4, h5, h6 {
     <div class="w3-container" id="connectPanel">
 
       <label>MQTT Host</label>
-      <input class="w3-input w3-border" id="host" type="text" placeholder="example.com[:port]" />
+      <input class="w3-input w3-border" id="host" type="text" placeholder="<ws|wss>://example.com[:port]" />
       <label>Topic</label>
-      <input class="w3-input w3-border" id="topic" type="text" placeholder="topic" />
+      <input class="w3-input w3-border" id="topic" type="text" placeholder="topic/name" />
       <label for="username">Username:</label><br>
       <input class="w3-input w3-border" type="text" id="username" name="username" placeholder="username" />
       <label for="pwd">Password:</label><br>
@@ -40,9 +40,9 @@ body, h1, h2, h3, h4, h5, h6 {
     </div>
 
     <div class="w3-container w3-content" id="mqttPanel">
-      <p class="w3-center" id="longLat">Longitude: x; Latitude: y</p>
+      <div class="w3-row" id="longLat"><div class="w3-col w3-half w3-center">Longitude: <span id="long">x</span></div><div class="w3-col w3-half w3-center"> Latitude: <span id="lat">y</span></div></div>
       <label for="mqttString">MQTT String:</label><br />
-      <input class="w3-input w3-border" id="mqttString" name="pwd" placeholder="MQTT String" disabled/>
+      <input class="w3-input w3-border" id="mqttString" name="pwd" placeholder="MQTT String" readonly />
     </div>
     
     <div class="w3-panel">
@@ -106,12 +106,17 @@ function updateGPS() {
 
 function showPosition(position){
   var longLat = document.getElementById("longLat");
+  var longText = document.getElementById("long");
+  var latText = document.getElementById("lat");
   var mqtt = document.getElementById("mqttString");
   var long = position.coords.longitude;
   var lat = position.coords.latitude;
   var mrkr = document.getElementById("marker");
   
-  longLat.innerText = "Longitude: " + long + "; Latitude: " + lat + ";  updateIndx = [" + updateIndx + "]";
+  //longLat.innerText = "Longitude: " + long + "; Latitude: " + lat + ";  updateIndx = [" + updateIndx + "]";
+  
+  longText.innerText = long;
+  latText.innerText = lat;
   
   mqtt.value = makeString(long, lat);
   
@@ -197,6 +202,11 @@ function getLocation() {
 <script>
 function onDisConnectClick() {
   var btn = document.getElementById("disConnect");
+  var msg = document.getElementById("msg");
+  var host = document.getElementById("host");
+  var topic = document.getElementById("topic");
+  var username = document.getElementById("username");
+  var password = document.getElementById("password");
   
   if (btn.value == "Connect") {
     document.getElementById("host").disabled = true;
@@ -207,6 +217,9 @@ function onDisConnectClick() {
     accordian("connectPanel");
     accordian("bigBlock");
     btn.value = "Disconnect";
+    msg.innerText = "mqtt.connect(" + host.value + ")";
+    var ret = mqtt.connect('wss://192.168.119.136:1883');
+    console.log(ret);
   } else {
     document.getElementById("host").disabled = false;
     document.getElementById("topic").disabled = false;
