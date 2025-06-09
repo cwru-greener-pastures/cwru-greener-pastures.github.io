@@ -24,14 +24,14 @@ body, h1, h2, h3, h4, h5, h6 {
     <h2 class="w3-wide w3-center">Greener Pastures MQTT Interface</h2>
     <div class="w3-container" id="connectPanel">
 
-      <label>MQTT Host</label>
-      <input class="w3-input w3-border" id="host" type="text" placeholder="<ws|wss>://example.com[:port]" />
+      <label>MQTT Host (Requires Secure WebSockets wss://)</label>
+      <input class="w3-input w3-border" id="host" type="text" value="test.mosquitto.org:8081" placeholder="test.mosquitto.org:8081" />
       <label>Topic</label>
-      <input class="w3-input w3-border" id="topic" type="text" placeholder="topic/name" />
+      <input class="w3-input w3-border" id="topic" type="text" value="topic" placeholder="topic" />
       <label for="username">Username:</label><br>
       <input class="w3-input w3-border" type="text" id="username" name="username" placeholder="username" />
-      <label for="pwd">Password:</label><br>
-      <input class="w3-input w3-border" type="password" id="pwd" name="pwd" placeholder="password" />
+      <label for="password">Password:</label><br>
+      <input class="w3-input w3-border" type="text" id="password" name="password" placeholder="password" />
 
     </div>
     <p class="w3-center w3-text-red" id="msg">Message</p>
@@ -42,7 +42,7 @@ body, h1, h2, h3, h4, h5, h6 {
     <div class="w3-container w3-content" id="mqttPanel">
       <div class="w3-row" id="longLat"><div class="w3-col w3-half w3-center">Longitude: <span id="long">x</span></div><div class="w3-col w3-half w3-center"> Latitude: <span id="lat">y</span></div></div>
       <label for="mqttString">MQTT String:</label><br />
-      <input class="w3-input w3-border" id="mqttString" name="pwd" placeholder="MQTT String" readonly />
+      <input class="w3-input w3-border" id="mqttString" placeholder="MQTT String" readonly />
     </div>
     
     <div class="w3-panel">
@@ -200,6 +200,9 @@ function getLocation() {
 }
 </script>
 <script>
+
+var client;
+
 function onDisConnectClick() {
   var btn = document.getElementById("disConnect");
   var msg = document.getElementById("msg");
@@ -207,32 +210,78 @@ function onDisConnectClick() {
   var topic = document.getElementById("topic");
   var username = document.getElementById("username");
   var password = document.getElementById("password");
+  var sendMqtt = document.getElementById("sendMQTT");
   
   if (btn.value == "Connect") {
-    document.getElementById("host").disabled = true;
-    document.getElementById("topic").disabled = true;
-    document.getElementById("username").disabled = true;
-    document.getElementById("pwd").disabled = true;
-    document.getElementById("sendMQTT").disabled = false;
+    host.disabled = true;
+    topic.disabled = true;
+    username.disabled = true;
+    password.disabled = true;
+    sendMqtt.disabled = false;
     accordian("connectPanel");
     accordian("bigBlock");
     btn.value = "Disconnect";
-    msg.innerText = "mqtt.connect(" + host.value + ")";
-    var ret = mqtt.connect('wss://192.168.119.136:1883');
-    console.log(ret);
+    var mqtt_open_string = 'wss://' + host.value;
+    msg.innerText = "mqtt.connect(" + mqtt_open_string + ")";
+    client = mqtt.connect(mqtt_open_string, {rejectUnauthorized: 'false', forceNativeWebsockets: 'true'});
+    
+    client.on("connect", (connack) => {
+      client.subscribe(document.getElementById('topic').value, (err) => {
+        if (!err) {
+          msg.innerText = "Connected";
+        } else {
+          msg.innerText = "Error Connecting: [" + err + "]";        
+        }
+      });
+    });
+
+    client.on("message", (topic, message) => {
+      // message is Buffer
+      if (message){
+        console.log('message [' + message + '] on topic [' + topic + '] received');
+      }
+    });
+
+    client.on("end", () => {
+      // message is Buffer
+      msg.innerText = "End Called";
+    });
+
+    client.on("reconnect", () => {
+      // message is Buffer
+      msg.innerText = "Reconnecting";
+    });
+
+    client.on("disconnect", (packet) => {
+      // message is Buffer
+      msg.innerText = "Disconnect Received";
+    });
+
+    client.on("error", (error) => {
+      // message is Buffer
+      msg.innerText = "An error occurred";
+      client.end();
+    });
+
   } else {
-    document.getElementById("host").disabled = false;
-    document.getElementById("topic").disabled = false;
-    document.getElementById("username").disabled = false;
-    document.getElementById("pwd").disabled = false;
-    document.getElementById("sendMQTT").disabled = true;
+    host.disabled = false;
+    topic.disabled = false;
+    username.disabled = false;
+    password.disabled = false;
+    sendMqtt.disabled = true;
     accordian("connectPanel");
     accordian("bigBlock");
     btn.value = "Connect";
+    client.end();
   }
 }
 
 function sendLocationMQTT() {
+	if (client.connected) {
+      client.publish(document.getElementById('topic').value , document.getElementById('mqttString').value);
+    } else {
+      console.log('Tried to publish when not connected.');
+    }
 }
 
 function accordian(id) {
