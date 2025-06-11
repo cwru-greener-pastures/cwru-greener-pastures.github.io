@@ -22,6 +22,12 @@ body, h1, h2, h3, h4, h5, h6 {
   <!-- The Band Section -->
   <div class="w3-container w3-content " style="max-width:800px" id="band">
     <h2 class="w3-wide w3-center">Greener Pastures MQTT Interface</h2>
+    <div class="w3-panel w3-blue w3-display-container">
+      <span onclick="this.parentElement.display='none'" class="w3-button w3-large w3-dislay-topright">&times;</span>
+      <h3>Tweak</h3>
+      <p>This interface can send the MQTT string to the test server shown using WebSockets.  A WebSockest interface can be added to an existing MQTT server, but non-self-signed certificates are required (no way around it).  The repeater.sh bash script can be used to subscribe to the test server and topic and repeat the messages back to any desired MQTT server.  (<a href="repeater.sh">repeater.sh</a>)</p>
+      <p>The <code>username</code> and <code>password</code> are unimplemented.</p>
+    </div>
     <div class="w3-container" id="connectPanel">
 
       <label>MQTT Host (Requires Secure WebSockets wss://)</label>
